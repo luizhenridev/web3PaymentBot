@@ -20,7 +20,7 @@ BOT_USERNAME = os.environ.get('BOT_USERNAME')
 
 #Commands
 async def start_command(update:Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Olá, obrigado por falar comigo eu sou a Aurora!")
+    await update.message.reply_text("Who do you want me to be today?")
 
 async def help_command(update:Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("I'm Who! Please Type someting so I can respond")
@@ -107,7 +107,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     intention = intentions(text)
     if intention == '1':
-        await context.bot.send_photo(userId, response, connect_timeout=10)
+        await context.bot.send_photo(userId, response, connect_timeout=20)
     elif intention == '0':
         await update.message.reply_text(response, connect_timeout=10)
     
