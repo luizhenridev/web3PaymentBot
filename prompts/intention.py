@@ -7,8 +7,8 @@ TASKS:
     2. Your objective is understand what is the intention of user
     3. There are 3 intentions 
         0 - Chatter
-        1 - Image
-        2 - Audio
+        1 - NFT
+        2 - Payments
 
 EXAMPLES:
     ##note: These examples are for you undestand how to work.   
@@ -21,31 +21,31 @@ EXAMPLES:
         
         Example 2: 
             user message: 
-            I want that you are the spider man
+            How is the price of bitcoin, today?
             recommended answer:
             0
         
         Example 3: 
             user message: 
-            Hey, what are you doing, send me a photo.
+            Hey, create a image based on this description.
             recommended answer:
             1
 
         Example 4: 
             user message: 
-            Show where you are.
+            Create a photo that shows an ET.
             recommended answer:
             1
 
-        Example 4: 
+        Example 5: 
             user message: 
-            Send me a audio, you never did it before.
+            I want to pay my friend.
             recommended answer:
             2
 
-        Example 4: 
+        Example 6: 
             user message: 
-            Tell me about your day in audio please!
+            I want to send some coins to my wallet!
             recommended answer:
             2
  """
