@@ -10,30 +10,32 @@ env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
 
 INFURA_URL = os.environ.get('URL_SEPOLIA') 
-private_key = os.getenv("MNEMONIC_ACCOUNT")
+private_key = os.getenv("PRIVATE_KEY")
 
 web3 = Web3(Web3.HTTPProvider(INFURA_URL))
+check = web3.is_connected()
 
-mnemo = Mnemonic("english")
-seed = mnemo.to_seed(private_key)
-short_seed = seed[:32]
-hexSeed = short_seed.hex()
+account = web3.eth.account.from_key(private_key)
 
-account = web3.eth.account.from_key(hexSeed)
+address = account.address
+contract_abi = compiled_sol['contracts']['payment.sol']['Coin']['abi']
+contract_bytecode = compiled_sol['contracts']['payment.sol']['Coin']['evm']['bytecode']['object']
+
+contract = web3.eth.contract(abi=contract_abi, bytecode=contract_bytecode)
 
 
-contract = web3.eth.contract(abi=compiled_sol['contracts']['payment.sol']['Coin']['abi'], bytecode=compiled_sol['contracts']['payment.sol']['Coin']['evm']['bytecode']['object'])
-tx_data = contract.constructor().build_transaction({
-    'from': account.address,
-    'nonce': web3.eth.get_transaction_count(account.address),
-    'gas': 79756,
-    'gasPrice': web3.to_wei(21, 'gwei')
+contract_tx = contract.constructor().build_transaction({
+    'from': address,
+    'nonce': web3.eth.get_transaction_count(address),
+    'gas':2000000,
+    'gasPrice': web3.eth.gas_price,
 })
 
-signed_tx = web3.eth.account.sign_transaction(tx_data, hexSeed)
-tx_hash = web3.eth._send_raw_transaction(signed_tx.rawTransaction)
-tx_receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
+signed_txn = web3.eth.account.sign_transaction(contract_tx, private_key=private_key)
 
-contract_address = tx_receipt['contractAddress']
+txn_hash = web3.eth.send_raw_transaction(signed_txn.rawTransaction)
 
-print(contract_address)
+txn_receipt = web3.eth.wait_for_transaction_receipt(txn_hash)
+
+print(f'Contract deployed at address: {txn_receipt.contractAddress}')
+
